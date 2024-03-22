@@ -19,6 +19,8 @@ class Author(Likeable):
     user_author = models.ForeignKey(User, on_delete=models.CASCADE)
     _rating = models.IntegerField(default=0, db_column='rating')
 
+
+
     def update_rating(self):
         summa = 0
 
@@ -36,9 +38,14 @@ class Author(Likeable):
 
         self._rating = summa
         self.save()
+
+    def __str__(self):
+        return f'{self.user_author}'
 class Category(models.Model):
     category = models.CharField(max_length=255, unique=True)
 
+    def __str__(self):
+        return f'{self.category}'
 
 class Post(Likeable):
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
@@ -53,6 +60,9 @@ class Post(Likeable):
     def preview(self):
         return self.text[:124:] + '...'
 
+    def __str__(self):
+        return f'''{self.title} : {self.text}'''
+
 class PostCategory(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
@@ -64,4 +74,7 @@ class Comment(Likeable):
     text = models.TextField(unique=True)
     date = models.DateTimeField(auto_now_add=True)
     _rating = models.IntegerField(default=0, db_column='rating')
+
+    def __str__(self):
+        return f'{self.text}'
 
