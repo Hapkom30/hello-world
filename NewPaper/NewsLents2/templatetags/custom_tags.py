@@ -1,6 +1,5 @@
 from datetime import datetime
 from django import template
-from NewsLents2.models import Category
 
 
 
