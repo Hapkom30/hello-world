@@ -3,8 +3,8 @@ from .models import Post, Category, PostCategory
 from .filters import PostFilter
 from .forms import PostForm, StateForm
 from django.urls import reverse_lazy
-#from django.shortcuts import render
-#from django.http.response import HttpResponseRedirect
+from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.contrib.auth.decorators import login_required
 
 
 class PostList(ListView):
@@ -43,22 +43,26 @@ class PostDetail(DetailView):
         context['postcategory'] = PostCategory.objects.all()
         return context
 
-class PostCreate(CreateView):
+class PostCreate(PermissionRequiredMixin, CreateView):
+    permission_required = ('NewsLents2.add_post',)
     form_class = PostForm
     model = Post
     template_name = 'post_edit.html'
 
-class PostEdit(UpdateView):
+class PostEdit(PermissionRequiredMixin, UpdateView):
+    permission_required = ('NewsLents2.change_post',)
     form_class = PostForm
     model = Post
     template_name = 'post_edit.html'
 
-class PostDelete(DeleteView):
+class PostDelete(PermissionRequiredMixin, DeleteView):
+    permission_required = ('NewsLents2.delete_post',)
     model = Post
     template_name = 'post_delete.html'
     success_url = reverse_lazy('post_list')
 
-class StateCreate(CreateView):
+class StateCreate(PermissionRequiredMixin, CreateView):
+    permission_required = ('NewsLents2.create_post',)
     form_class = StateForm
     model = Post
     template_name = 'post_edit.html'
@@ -68,12 +72,14 @@ class StateCreate(CreateView):
         post.news_or_state = True
         return super().form_valid(form)
 
-class StateEdit(UpdateView):
+class StateEdit(PermissionRequiredMixin, UpdateView):
+    permission_required = ('NewsLents2.change_post',)
     form_class = StateForm
     model = Post
     template_name = 'post_edit.html'
 
-class StateDelete(DeleteView):
+class StateDelete(PermissionRequiredMixin, DeleteView):
+    permission_required = ('NewsLents2.delete_post',)
     model = Post
     template_name = 'post_delete.html'
     success_url = reverse_lazy('post_list')

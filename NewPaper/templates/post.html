@@ -28,6 +28,12 @@
              {% endif %}
             {% endfor %}</strong></td>
 <td style="width: 50vh; text-align: right;"><em>Дата добавления:&nbsp;{{ post.date|date_tag_post }}</em></td>
+            {% if perms.NewsLents2.change_post %}
+               <td style="width: 30vh; text-align: right;"><p><a href="{{ post.id }}/edit">Изменить</a>
+            {% endif %}
+            {% if perms.NewsLents2.delete_post %}
+                <a href="{{ post.id }}/delete">Удалить</a></p></td>
+            {% endif %}
 </tr>
 </tbody>
 </table>
