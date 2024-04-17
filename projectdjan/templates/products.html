@@ -1,0 +1,85 @@
+{% extends 'flatpages/default.html' %}
+
+{% load custom_filters %}
+{% load custom_tags %}
+
+{% block title %}
+Products
+{% endblock title %}
+
+{% block content %}
+   <h1>Все товары</h1>
+   <h3>{% current_time '%b %d %Y' %}</h3>
+   <!-- Если в переменной next_sale будет None,
+   то выведется указанный в фильтре текст -->
+   <h3> {{ next_sale|default_if_none:"Чуть позже сообщим о распродаже!" }} </h3>
+   {# Добавляем форму, которая объединяет набор полей, которые будут отправляться в запросе #}
+<form action="" method="get" >
+ {{ filterset.form.as_p }}
+
+    <input type="submit" class="mt-3 btn-primary" value="Найти"  />
+
+</form>
+{% if perms.simpleapp.add_product %}
+    <hr>
+
+    <p><strong><a href="{% url 'product_create' %}">Добавить товар</a></strong></p>
+
+   <hr>
+{% endif %}
+   {% if products %}
+       <table style="width: 150vh;">
+           <tr>
+               <td style="width: 30vh;"><strong>Название</strong></td>
+               <td style="width: 70vh;"><strong>Описание</strong></td>
+               <td style="width: 20vh;"><strong>Категория</strong></td>
+               <td style="width: 15vh;"><strong>Цена</strong></td>
+               <td style="width: 15vh;"><strong>Количество</strong></td>
+               {% if not user.is_anonymous %}
+               <td style="width: 20vh;"><strong>Редактировать</strong></td>
+               {% endif %}
+           </tr>
+
+           {% for product in products %}
+           <tr>
+               <td><a href="{{ product.id }}">{{ product.name }}</a></z></td>
+               <td>{{ product.description|truncatewords:6 }}</td>
+               <td>{{ product.category.name }}</td>
+               <td>{{ product.price|currency }}</td>
+               <td>{{ product.quantity }}</td>
+               {% if perms.simpleapp.change_product %}
+               <td><p><a href="{{ product.id }}/update">Изменить</a>
+                   {% endif %}
+                   {% if perms.simpleapp.delete_product %}
+                   <a href="{{ product.id }}/delete">Удалить</a></p></td>
+                   {% endif %}
+           </tr>
+           {% endfor %}
+
+       </table>
+   {% else %}
+       <h2>Товаров нет!</h2>
+   {% endif %}
+   {# Добавляем пагинацию на страницу #}
+
+   {# Информация о предыдущих страницах #}
+   {% if page_obj.has_previous %}
+       {# Для каждой ссылки пагинации указываем обработку через новый тег #}
+       <a href="?{% url_replace page=1 %}">1</a>
+       {% if page_obj.previous_page_number != 1 %}
+           ...
+           <a href="?{% url_replace page=page_obj.previous_page_number %}">{{ page_obj.previous_page_number }}</a>
+       {% endif %}
+   {% endif %}
+
+   {{ page_obj.number }}
+
+   {% if page_obj.has_next %}
+       <a href="?{% url_replace page=page_obj.next_page_number %}">{{ page_obj.next_page_number }}</a>
+       {% if paginator.num_pages != page_obj.next_page_number %}
+           ...
+           <a href="?{% url_replace page=page_obj.paginator.num_pages %}">{{ page_obj.paginator.num_pages }}</a>
+       {% endif %}
+   {% endif %}
+
+{% endblock content %}

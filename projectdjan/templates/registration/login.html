@@ -1,0 +1,17 @@
+{% extends 'flatpages/default.html' %}
+
+{% block content %}
+
+<form method="post" action="{% url 'login' %}">
+{% csrf_token %}
+
+    <hr>
+    Если у вас нету логина и пароля, вы можете <a href="{% url 'signup' %}">зарегистрироваться.</a>
+    <hr>
+    {{ form.as_p }}
+    <input type="submit" value="Вход">
+    <input type="hidden" name="next" value="{{ next }}">
+    <hr>
+</form>
+
+{% endblock %}

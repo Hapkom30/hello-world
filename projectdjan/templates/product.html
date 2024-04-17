@@ -1,0 +1,38 @@
+<!--  наследуемся от шаблона default.html, который мы создавали для flatpages -->
+<p>{% extends 'flatpages/default.html' %}</p>
+<!-- Название у нас будет Product -->
+<p>{% block title %} Product {% endblock title %}</p>
+<!-- В контенте на странице мы выводим сам товар, идентификатор которого был передан в url -->
+<p>{% block content %}</p>
+<table style="width: 150vh; text-align: left;" height="300px">
+<tbody>
+<tr>
+<td>
+<h2>{{ product.name }}</h2>
+</td>
+</tr>
+<tr>
+<td>{{ product.description }}
+   {% if perms.simpleapp.change_product %}
+               <td><p><a href="{{ product.id }}/update">Изменить</a>
+                   {% endif %}
+                   {% if perms.simpleapp.delete_product %}
+                   <a href="{{ product.id }}/delete">Удалить</a></p></td>
+                   {% endif %}
+</tr>
+<tr>
+<td>
+<div>
+<pre>Категория: {{ product.category.name }}</pre>
+</div></td>
+</tr>
+<tr>
+<td>
+<div>
+<h2><strong>Цена: {{ product.price }}</strong></h2>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<p>{% endblock content %}</p>
