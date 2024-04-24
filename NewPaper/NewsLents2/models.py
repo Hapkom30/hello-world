@@ -44,6 +44,7 @@ class Author(Likeable):
         return f'{self.user_author}'
 class Category(models.Model):
     category = models.CharField(max_length=255, unique=True)
+    subscribers = models.ManyToManyField(User, related_name='categories', through='Subscription')
 
     def __str__(self):
         return f'{self.category}'
@@ -62,7 +63,7 @@ class Post(Likeable):
         return self.text[:124:] + '...'
 
     def __str__(self):
-        return f'''{self.title} : {self.text}'''
+        return f'''{self.title[:90:]} : {self.text[:200:]}'''
 
     def get_absolute_url(self):
         return reverse('post_detail', args=[str(self.id)])
@@ -71,6 +72,8 @@ class PostCategory(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return f'''{self.post.title[:40:]} : {self.category}'''
 
 class Comment(Likeable):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
@@ -80,5 +83,19 @@ class Comment(Likeable):
     _rating = models.IntegerField(default=0, db_column='rating')
 
     def __str__(self):
-        return f'{self.text}'
+        return f'{self.post.title[:40:]} : {self.text}'
 
+class Subscription(models.Model):
+    user = models.ForeignKey(
+        to=User,
+        on_delete=models.CASCADE,
+        related_name='subscriptions',
+    )
+    category = models.ForeignKey(
+        to='Category',
+        on_delete=models.CASCADE,
+        related_name='subscriptions',
+    )
+
+    def __str__(self):
+        return f'{self.user} : {self.category}'

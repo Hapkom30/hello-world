@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'NewsLents2',
     'django_filters',
+    'accounts',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
@@ -152,6 +153,25 @@ ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
-ACCOUNT_EMAIL_VERIFICATION = 'none'
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.yandex.ru'
+EMAIL_PORT = 465
+EMAIL_HOST_USER = "hapknap@yandex.ru"
+EMAIL_HOST_PASSWORD = "nynujzvnxzpglykp"
+EMAIL_USE_TLS = False
+EMAIL_USE_SSL = True
+
+DEFAULT_FROM_EMAIL = "hapknap@yandex.ru"
+
+SERVER_EMAIL = "hapknap@yandex.ru"
+MANAGERS = (
+    ('Dima', 'hapknap@mail.ru'),
+)
+ADMINS = (
+    ('Dima', 'hapknap@mail.ru'),
+)
+
 SITE_ID = 1
 
