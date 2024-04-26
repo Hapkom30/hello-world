@@ -1,6 +1,7 @@
 from django.db.models.signals import m2m_changed
 from django.dispatch import receiver
-from django.core.mail import EmailMultiAlternatives
+from .tasks import send_notification
+
 
 from .models import PostCategory
 from django.contrib.auth.models import User
@@ -32,7 +33,6 @@ def post_created(instance, action, **kwargs):
             f'<a href="http://127.0.0.1:8000{instance.get_absolute_url()}">'
             f'Ссылка на новость</a>'
         )
+
         for email in emails:
-            msg = EmailMultiAlternatives(subject, text_content, None, [email])
-            msg.attach_alternative(html_content, "text/html")
-            msg.send()
+            send_notification.delay(subject, text_content, html_content, email)
