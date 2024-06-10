@@ -19,5 +19,5 @@ urlpatterns = [
    path('articles/create', StateCreate.as_view(), name='create_articles'),
    path('articles/<int:pk>/edit/', StateEdit.as_view(), name='articles_edit'),
    path('articles/<int:pk>/delete/', StateDelete.as_view(), name='articles_delete'),
-   path('subscriptions/', subscriptions, name='subscriptions'),
+   path('subscriptions/',subscriptions, name='subscriptions'),
 ]

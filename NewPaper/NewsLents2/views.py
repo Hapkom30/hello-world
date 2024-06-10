@@ -12,6 +12,12 @@ from django.db.models import Exists, OuterRef
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_protect
 
+from django.core.cache import cache
+import logging
+
+logger = logging.getLogger(__name__)
+
+
 
 class PostList(ListView):
     model = Post
@@ -19,6 +25,7 @@ class PostList(ListView):
     template_name = 'posts.html'
     context_object_name = 'posts'
     paginate_by = 10
+    logger.info('INFO')
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -42,6 +49,16 @@ class PostDetail(DetailView):
     model = Post
     template_name = 'post.html'
     context_object_name = 'post'
+    queryset = Post.objects.all()
+
+    def get_object(self, *args, **kwargs):  # переопределяем метод получения объекта, как ни странно
+        obj = cache.get(f'post-{self.kwargs["pk"]}', None)  # кэш очень похож на словарь, и метод get действует так же. Он забирает значение по ключу, если его нет, то забирает None.
+        # если объекта нет в кэше, то получаем его и записываем в кэш
+        if not obj:
+            obj = super().get_object(queryset=self.queryset)
+            cache.set(f'post-{self.kwargs["pk"]}', obj)
+
+        return obj
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

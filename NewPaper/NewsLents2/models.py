@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.urls import reverse
 
+from django.core.cache import cache
+
 # Create your models here.
 class Likeable(models.Model):
     _rating = models.IntegerField(default=0, db_column='rating')
@@ -67,6 +69,10 @@ class Post(Likeable):
 
     def get_absolute_url(self):
         return reverse('post_detail', args=[str(self.id)])
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        cache.delete(f'post-{self.pk}')
 
 class PostCategory(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)

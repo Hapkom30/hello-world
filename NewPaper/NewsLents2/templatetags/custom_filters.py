@@ -6,7 +6,7 @@ f = open('mat.txt', 'r', encoding='utf8')
 censor_list = f.read().split(', ')
 f.close()
 
-# Регистрируем наш фильтр под именем currency, чтоб Django понимал,
+# Регистрируем наш фильтр под именем currency, чтобы Django понимал,
 # что это именно фильтр для шаблонов, а не простая функция.
 @register.filter()
 def date_tag_post(value):
