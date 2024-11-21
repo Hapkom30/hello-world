@@ -1,0 +1,65 @@
+.header{
+background: black;
+}
+
+.inner-header{
+}
+
+.logo-conteiner{
+height: 100%;
+display: table;
+}
+
+.logo-conteiner h1{
+color: white;
+}
+
+.content{
+    height: 100%;
+    font-family: verdana;
+    front-size:39;
+}
+
+.content p{
+    height: 100%;
+    front-size:40;
+}
+
+.content table{
+border-spacing:15px;
+}
+
+.content img{
+padding:15px;
+background-color: black;
+}
+
+.content img:hover{
+    background-color: gray;
+    color: #101010;
+}
+
+.navigation{
+    float: right;
+    height: 100%;
+}
+ 
+.navigation a{
+    height: 100%;
+    display: table;
+    float: left;
+    padding: 0px 20px;
+    background-color: #101010;
+}
+ 
+.navigation a li{
+    vertical-align: middle;
+    display: table-cell;
+    font-size: 20px;
+    color: white;
+}
+ 
+.navigation a:hover{
+    background-color: gray;
+    color: #101010;
+}
